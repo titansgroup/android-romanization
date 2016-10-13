@@ -56,10 +56,18 @@ public class ChineseString {
 
     public String[] getRomanized() {
         // When available, MODE_ACCENTED should be default
-        return getRomanized(MODE_NUMBERED);
+        return getRomanized(MODE_NUMBERED, " ");
     }
 
     public String[] getRomanized(int mode) {
+        return getRomanized(mode, " ");
+    }
+
+    public String[] getRomanized(String delimiter) {
+        return getRomanized(MODE_NUMBERED, delimiter);
+    }
+
+    public String[] getRomanized(int mode, String delimiter) {
         Object[] romanized = new Object[this.src.length()];
         // Assembles a list of possibilities which include either a char or an array of Strings
         for (int i = 0; i < this.src.length(); i++) {
@@ -72,10 +80,10 @@ public class ChineseString {
             }
         }
 
-        return buildResults(romanized, null, 0);
+        return buildResults(romanized, null, 0, delimiter);
     }
 
-    private String[] buildResults(Object[] list, String[] assembled, int position) {
+    private String[] buildResults(Object[] list, String[] assembled, int position, String delimiter) {
         if (assembled == null)
             assembled = new String[] {""};
         if (position >= list.length)
@@ -87,6 +95,8 @@ public class ChineseString {
                 // No string or empty string: Does nothing
             } else if (current.length == 1) {
                 for (int i = 0; i < assembled.length; i++) {
+                    if (assembled[i].length() > 0 && !assembled[i].endsWith(delimiter))
+                        assembled[i] += delimiter;
                     assembled[i] += current[0];
                 }
             } else {
@@ -105,6 +115,6 @@ public class ChineseString {
                 assembled[i] += current;
             }
         }
-        return buildResults(list, assembled, position + 1);
+        return buildResults(list, assembled, position + 1, delimiter);
     }
 }
