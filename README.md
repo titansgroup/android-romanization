@@ -20,10 +20,23 @@ The Unicode-Pinyin table can be found [here](ftp://ftp.cuhk.hk/pub/chinese/ifcss
 
     ```
 dependencies {
-    compile(name: 'android-romanization-0.1', ext: 'aar')
+        compile(name: 'android-romanization-0.1', ext: 'aar')
 ```
 
-3. Use the class `ChineseString` to obtain the string in its romanized form:
+3. At any time in your application, initialize the language to load the data
+from the Context (included in the library).
+
+    ```
+import life.knowledge4.romanization.PinYinTable;
+...
+
+protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PinYinTable.initialize(getContext());
+}
+```   
+
+4. Use the class `ChineseString` to obtain the string in its romanized form:
 
     ```
 > ChineseString("人").getRomanized()
@@ -40,7 +53,7 @@ dependencies {
     Please note that, because some characters may have different pronunciations,
     and thus may be represented by different Latin strings, the function will
     return all possible values. Thus, you shouldn't create a `ChineseString`
-    instance with too many characters.
+    instance with too many characters, as they may grow fast.
 
     ```
 > ChineseString("中文").getRomanized()
